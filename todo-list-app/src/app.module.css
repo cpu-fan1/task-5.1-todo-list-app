@@ -1,0 +1,57 @@
+.app {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 2rem;
+	text-align: center;
+	background-color: rgb(181, 221, 221);
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+	border-radius: 20px;
+}
+
+.loader {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 25px;
+	height: 25px;
+	border: 5px solid gray;
+	border-radius: 50%;
+	border-left-color: transparent;
+	animation: loader 1s infinite;
+}
+
+@keyframes loader {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.completed {
+	text-decoration: line-through;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+p {
+	padding: 0 20px;
+	margin: 0;
+}
+
+li {
+	display: flex;
+	flex-direction: row;
+}
+
+li:nth-child(even) {
+	background-color: rgb(188, 192, 191);
+	box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+	border-radius: 5px;
+}
