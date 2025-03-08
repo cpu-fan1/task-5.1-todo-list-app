@@ -10,7 +10,7 @@ export const AppLayout = ({
 	setTask,
 	refreshTodos,
 	setSearchValue,
-	filteredTodos,
+	filterTodos,
 	isSorted,
 	setIsSorted,
 }) => {
@@ -28,7 +28,7 @@ export const AppLayout = ({
 					<div className={styles.loader}></div>
 				) : (
 					<ul>
-						{filteredTodos().map(({ id, title, completed }) => (
+						{filterTodos().map(({ id, title, completed }) => (
 							<li key={id}>
 								<p className={completed ? `${styles.completed}` : ''}>
 									{title}

@@ -8,6 +8,7 @@ function App() {
 	const [refreshTodosFlag, setRefreshTodosFlag] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 	const [isSorted, setIsSorted] = useState(false);
+	const [initialTodos, setInitialTodos] = useState([]);
 
 	const refreshTodos = () => setRefreshTodosFlag(!refreshTodosFlag);
 
@@ -18,27 +19,31 @@ function App() {
 			.then((loadedData) => loadedData.json())
 			.then((loadedTodos) => {
 				setTodos(loadedTodos);
+				setInitialTodos(loadedTodos);
 			})
 			.finally(() => setIsLoading(false));
 	}, [refreshTodosFlag]);
 
-	const filteredTodos = () => {
-		// if (!searchValue) {
-		// 	return todos;
-		// }
-		// return todos.filter((todo) => todo.title.toLowerCase().includes(searchValue));
-
-		let result = todos;
+	const filterTodos = () => {
+		let result = [...initialTodos];
 		if (searchValue) {
 			result = result.filter((todo) =>
 				todo.title.toLowerCase().includes(searchValue),
 			);
 		}
 		if (isSorted) {
-			result = [...result].sort((a, b) => a.title.localeCompare(b.title));
+			result = result.sort((a, b) => a.title.localeCompare(b.title));
 		}
 		return result;
 	};
+
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			setTodos(filterTodos());
+		}, 500);
+
+		return () => clearTimeout(debounce);
+	}, [searchValue, isSorted]);
 
 	return (
 		<AppLayout
@@ -49,7 +54,7 @@ function App() {
 			setTask={setTask}
 			refreshTodos={refreshTodos}
 			setSearchValue={setSearchValue}
-			filteredTodos={filteredTodos}
+			filterTodos={filterTodos}
 			isSorted={isSorted}
 			setIsSorted={setIsSorted}
 		/>

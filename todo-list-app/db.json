@@ -19,6 +19,21 @@
       "title": "Полдник",
       "completed": false,
       "id": 5
+    },
+    {
+      "title": "ночной",
+      "completed": false,
+      "id": 6
+    },
+    {
+      "title": "завтрак",
+      "completed": false,
+      "id": 7
+    },
+    {
+      "title": "завтрак п",
+      "completed": false,
+      "id": 8
     }
   ]
 }
