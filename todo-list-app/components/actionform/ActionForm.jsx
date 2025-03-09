@@ -1,28 +1,27 @@
 import { ActionFormLayout } from './ActionFormLayout';
 import { useState } from 'react';
+import { ref, push } from 'firebase/database';
+import { db } from '../../src/firebase';
 
-export const ActionForm = ({ task, setTask, refreshTodos }) => {
+export const ActionForm = ({ task, setTask }) => {
 	const [buttonActive, setButtonActive] = useState(false);
 
 	const onSubmit = (event) => {
 		event.preventDefault();
 
-		fetch('http://localhost:3005/todos', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				title: task,
-				completed: false,
-			}),
+		const todosDbRef = ref(db, 'todos');
+
+		push(todosDbRef, {
+			title: task,
+			completed: false,
 		}).then(() => {
 			setTask('');
 			setButtonActive(false);
-			refreshTodos();
 		});
 	};
 
 	const taskHandler = (event) => {
-		const inputValue = event.target.value.trim();
+		const inputValue = event.target.value;
 		setTask(inputValue);
 		setButtonActive(inputValue.length > 0);
 	};

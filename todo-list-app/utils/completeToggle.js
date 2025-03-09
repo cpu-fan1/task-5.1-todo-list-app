@@ -1,22 +1,11 @@
-export const completeToggle = (todos, id, title, completed, setTodos, refreshTodos) => {
-	fetch(`http://localhost:3005/todos/${id}`, {
-		method: 'PUT',
-		headers: { 'Content-Type': 'application/json;charset=utf-8' },
-		body: JSON.stringify({
-			title: title,
-			completed: !completed,
-		}),
-	})
-		.then(() => {
-			setTodos(
-				todos.map((todo) =>
-					todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-				),
-			);
-			refreshTodos();
-		})
-		.catch((error) => console.error('Ошибка при удалении:', error));
-	// return todos.map((todo) =>
-	// 	todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-	// );
+import { db } from '../src/firebase';
+import { ref, set } from 'firebase/database';
+
+export const completeToggle = (id, title, completed) => {
+	const completeDbRef = ref(db, `todos/${id}`);
+
+	set(completeDbRef, {
+		title: title,
+		completed: !completed,
+	}).catch((error) => console.error('Ошибка при удалении:', error));
 };

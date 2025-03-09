@@ -1,55 +1,66 @@
 import { useState, useEffect } from 'react';
 import { AppLayout } from './AppLayout';
+import { ref, onValue } from 'firebase/database';
+import { db } from './firebase';
 
 function App() {
-	const [todos, setTodos] = useState([]);
+	const [todos, setTodos] = useState({});
 	const [task, setTask] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
-	const [refreshTodosFlag, setRefreshTodosFlag] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [searchValue, setSearchValue] = useState('');
 	const [isSorted, setIsSorted] = useState(false);
-
-	const refreshTodos = () => setRefreshTodosFlag(!refreshTodosFlag);
+	const [initialTodos, setInitialTodos] = useState({});
 
 	useEffect(() => {
-		setIsLoading(true);
+		const todosDbRef = ref(db, 'todos');
 
-		fetch('http://localhost:3005/todos')
-			.then((loadedData) => loadedData.json())
-			.then((loadedTodos) => {
-				setTodos(loadedTodos);
-			})
-			.finally(() => setIsLoading(false));
-	}, [refreshTodosFlag]);
+		return onValue(todosDbRef, (snapshot) => {
+			const loadedTodos = snapshot.val() || {};
+			setTodos(loadedTodos);
+			setInitialTodos(loadedTodos);
+			setIsLoading(false);
+		});
+	}, []);
 
-	const filteredTodos = () => {
-		// if (!searchValue) {
-		// 	return todos;
-		// }
-		// return todos.filter((todo) => todo.title.toLowerCase().includes(searchValue));
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			// Преобразуем объект todos в массив для фильтрации и сортировки
+			let todosArray = Object.entries(todos);
 
-		let result = todos;
-		if (searchValue) {
-			result = result.filter((todo) =>
-				todo.title.toLowerCase().includes(searchValue),
-			);
+			// Фильтрация по строке поиска
+			if (searchValue) {
+				todosArray = todosArray.filter(([id, todo]) =>
+					todo.title.toLowerCase().includes(searchValue.toLowerCase()),
+				);
+			}
+
+			// Сортировка по алфавиту
+			if (isSorted) {
+				todosArray = todosArray.sort(([, a], [, b]) =>
+					a.title.localeCompare(b.title),
+				);
+			}
+
+			// Преобразуем обратно в объект и обновляем состояние
+			setTodos(Object.fromEntries(todosArray));
+		}, 500);
+
+		return () => clearTimeout(debounce);
+	}, [searchValue, isSorted, todos]);
+
+	useEffect(() => {
+		if (searchValue === '') {
+			setTodos(initialTodos);
 		}
-		if (isSorted) {
-			result = [...result].sort((a, b) => a.title.localeCompare(b.title));
-		}
-		return result;
-	};
+	}, [searchValue, initialTodos]);
 
 	return (
 		<AppLayout
 			todos={todos}
-			setTodos={setTodos}
 			isLoading={isLoading}
 			task={task}
 			setTask={setTask}
-			refreshTodos={refreshTodos}
 			setSearchValue={setSearchValue}
-			filteredTodos={filteredTodos}
 			isSorted={isSorted}
 			setIsSorted={setIsSorted}
 		/>

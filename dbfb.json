@@ -1,0 +1,24 @@
+{
+  "todos": {
+		"1":{
+		"title": "завтрак",
+		"completed": true
+		},
+		"2":{
+		"title": "Ужин",
+		"completed": false
+		},
+		"3":{
+		"title": "обед",
+		"completed": true
+		},
+		"4":{
+		"title": "Полдник",
+		"completed": false
+		},
+		"5":{
+		"title": "завтрак п",
+		"completed": false
+		}
+	}
+}

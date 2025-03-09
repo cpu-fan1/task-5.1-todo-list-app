@@ -4,13 +4,10 @@ import { completeToggle, deleteTaskButton } from '../utils';
 
 export const AppLayout = ({
 	todos,
-	setTodos,
 	isLoading,
 	task,
 	setTask,
-	refreshTodos,
 	setSearchValue,
-	filteredTodos,
 	isSorted,
 	setIsSorted,
 }) => {
@@ -18,7 +15,7 @@ export const AppLayout = ({
 		<>
 			<div className={styles.app}>
 				<h1>Cписок дел</h1>
-				<ActionForm task={task} setTask={setTask} refreshTodos={refreshTodos} />
+				<ActionForm task={task} setTask={setTask} />
 				<SearchForm
 					setSearchValue={setSearchValue}
 					isSorted={isSorted}
@@ -28,7 +25,7 @@ export const AppLayout = ({
 					<div className={styles.loader}></div>
 				) : (
 					<ul>
-						{filteredTodos().map(({ id, title, completed }) => (
+						{Object.entries(todos).map(([id, { title, completed }]) => (
 							<li key={id}>
 								<p className={completed ? `${styles.completed}` : ''}>
 									{title}
@@ -41,28 +38,14 @@ export const AppLayout = ({
 												: styles['action-button-confirm']
 										}
 										onClick={() => {
-											completeToggle(
-												todos,
-												id,
-												title,
-												completed,
-												setTodos,
-												refreshTodos,
-											);
+											completeToggle(id, title, completed);
 										}}
 									>
 										{completed ? '⟲' : '✔'}
 									</button>
 									<button
 										className={styles['action-button-delete']}
-										onClick={() =>
-											deleteTaskButton(
-												todos,
-												id,
-												refreshTodos,
-												setTodos,
-											)
-										}
+										onClick={() => deleteTaskButton(id)}
 									>
 										✖
 									</button>

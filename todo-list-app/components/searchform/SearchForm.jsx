@@ -12,6 +12,7 @@ export const SearchForm = ({ setSearchValue, isSorted, setIsSorted }) => {
 	const onSubmit = (event) => {
 		event.preventDefault();
 	};
+
 	return (
 		<SearchFormLayout
 			onSubmit={onSubmit}

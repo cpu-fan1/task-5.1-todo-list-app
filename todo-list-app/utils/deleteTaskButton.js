@@ -1,10 +1,7 @@
-export const deleteTaskButton = (todos, id, refreshTodos, setTodos) => {
-	fetch(`http://localhost:3005/todos/${id}`, {
-		method: 'DELETE',
-	})
-		.then(() => {
-			setTodos(todos.filter((todo) => todo.id !== id));
-			refreshTodos();
-		})
-		.catch((error) => console.error('Ошибка при удалении:', error));
+import { db } from '../src/firebase';
+import { ref, remove } from 'firebase/database';
+
+export const deleteTaskButton = (id) => {
+	const deleteTaskRef = ref(db, `todos/${id}`);
+	remove(deleteTaskRef).catch((error) => console.error('Ошибка при удалении:', error));
 };
