@@ -22,7 +22,7 @@ export const ActionForm = ({ task, setTask, refreshTodos }) => {
 	};
 
 	const taskHandler = (event) => {
-		const inputValue = event.target.value.trim();
+		const inputValue = event.target.value;
 		setTask(inputValue);
 		setButtonActive(inputValue.length > 0);
 	};

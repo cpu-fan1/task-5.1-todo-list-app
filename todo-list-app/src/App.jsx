@@ -8,6 +8,8 @@ function App() {
 	const [refreshTodosFlag, setRefreshTodosFlag] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 	const [isSorted, setIsSorted] = useState(false);
+	const [modalActive, setModalActive] = useState(false);
+	const [editingTask, setEditingTask] = useState(null);
 
 	const refreshTodos = () => setRefreshTodosFlag(!refreshTodosFlag);
 
@@ -52,6 +54,10 @@ function App() {
 			filteredTodos={filteredTodos}
 			isSorted={isSorted}
 			setIsSorted={setIsSorted}
+			modalActive={modalActive}
+			setModalActive={setModalActive}
+			editingTask={editingTask}
+			setEditingTask={setEditingTask}
 		/>
 	);
 }

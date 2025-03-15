@@ -1,6 +1,6 @@
 import styles from './app.module.css';
-import { ActionForm, SearchForm } from '../components/';
-import { completeToggle, deleteTaskButton } from '../utils';
+import { ActionForm, SearchForm, EditModalWindow } from '../components/';
+import { completeToggle, deleteTask } from '../api';
 
 export const AppLayout = ({
 	todos,
@@ -13,9 +13,20 @@ export const AppLayout = ({
 	filteredTodos,
 	isSorted,
 	setIsSorted,
+	modalActive,
+	setModalActive,
+	editingTask,
+	setEditingTask,
 }) => {
 	return (
 		<>
+			<EditModalWindow
+				todos={todos}
+				setTodos={setTodos}
+				modalActive={modalActive}
+				setModalActive={setModalActive}
+				editingTask={editingTask}
+			/>
 			<div className={styles.app}>
 				<h1>Cписок дел</h1>
 				<ActionForm task={task} setTask={setTask} refreshTodos={refreshTodos} />
@@ -54,14 +65,18 @@ export const AppLayout = ({
 										{completed ? '⟲' : '✔'}
 									</button>
 									<button
+										className={styles['action-button-edit']}
+										onClick={() => {
+											setEditingTask({ id, title, completed });
+											setModalActive(true);
+										}}
+									>
+										🖊
+									</button>
+									<button
 										className={styles['action-button-delete']}
 										onClick={() =>
-											deleteTaskButton(
-												todos,
-												id,
-												refreshTodos,
-												setTodos,
-											)
+											deleteTask(todos, id, refreshTodos, setTodos)
 										}
 									>
 										✖

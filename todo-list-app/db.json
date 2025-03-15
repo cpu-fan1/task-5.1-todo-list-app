@@ -2,7 +2,7 @@
   "todos": [
     {
       "title": "завтрак",
-      "completed": true,
+      "completed": false,
       "id": 1
     },
     {
@@ -11,7 +11,7 @@
       "id": 3
     },
     {
-      "title": "обед",
+      "title": "обеды\n",
       "completed": true,
       "id": 4
     },

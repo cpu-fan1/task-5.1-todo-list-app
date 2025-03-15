@@ -92,3 +92,7 @@ li {
 .action-button-delete {
 	background-color: rgb(148, 58, 58);
 }
+
+.action-button-edit {
+	background-color: rgb(74, 106, 175);
+}

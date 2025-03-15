@@ -16,7 +16,4 @@ export const completeToggle = (todos, id, title, completed, setTodos, refreshTod
 			refreshTodos();
 		})
 		.catch((error) => console.error('Ошибка при удалении:', error));
-	// return todos.map((todo) =>
-	// 	todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-	// );
 };
