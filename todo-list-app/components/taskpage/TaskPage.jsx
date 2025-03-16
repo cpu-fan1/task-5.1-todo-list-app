@@ -25,7 +25,7 @@ export const TaskPage = ({
 			.then((data) => setPickedTask(data))
 			.catch(() => setPickedTask(null))
 			.finally(() => setIsLoading(false));
-	}, [params.id]);
+	}, [params.id, setIsLoading]);
 
 	return (
 		<div className={styles.container}>

@@ -1,10 +1,8 @@
 import styles from './app.module.css';
-import { ActionForm, SearchForm, EditModalWindow } from '../components/';
+import { ActionForm, SearchForm } from '../components/';
 import { NavLink } from 'react-router-dom';
 
 export const AppLayout = ({
-	todos,
-	setTodos,
 	isLoading,
 	task,
 	setTask,
@@ -41,17 +39,6 @@ export const AppLayout = ({
 										{title}
 									</p>
 								</NavLink>
-								{/* <div className={styles['action-buttons']}>
-									<button
-										className={styles['action-button-edit']}
-										onClick={() => {
-											setEditingTask({ id, title, completed });
-											setModalActive(true);
-										}}
-									>
-										🖊
-									</button>
-								</div> */}
 							</li>
 						))}
 					</ul>
