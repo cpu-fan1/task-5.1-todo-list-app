@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AppLayout } from './AppLayout';
+import { Routes, Route } from 'react-router-dom';
+import { TaskPage, Page404 } from '../components/';
 
 function App() {
 	const [todos, setTodos] = useState([]);
@@ -25,11 +27,6 @@ function App() {
 	}, [refreshTodosFlag]);
 
 	const filteredTodos = () => {
-		// if (!searchValue) {
-		// 	return todos;
-		// }
-		// return todos.filter((todo) => todo.title.toLowerCase().includes(searchValue));
-
 		let result = todos;
 		if (searchValue) {
 			result = result.filter((todo) =>
@@ -43,22 +40,46 @@ function App() {
 	};
 
 	return (
-		<AppLayout
-			todos={todos}
-			setTodos={setTodos}
-			isLoading={isLoading}
-			task={task}
-			setTask={setTask}
-			refreshTodos={refreshTodos}
-			setSearchValue={setSearchValue}
-			filteredTodos={filteredTodos}
-			isSorted={isSorted}
-			setIsSorted={setIsSorted}
-			modalActive={modalActive}
-			setModalActive={setModalActive}
-			editingTask={editingTask}
-			setEditingTask={setEditingTask}
-		/>
+		<Routes>
+			<Route
+				path="/"
+				element={
+					<AppLayout
+						todos={todos}
+						setTodos={setTodos}
+						isLoading={isLoading}
+						task={task}
+						setTask={setTask}
+						refreshTodos={refreshTodos}
+						setSearchValue={setSearchValue}
+						filteredTodos={filteredTodos}
+						isSorted={isSorted}
+						setIsSorted={setIsSorted}
+						modalActive={modalActive}
+						setModalActive={setModalActive}
+						editingTask={editingTask}
+						setEditingTask={setEditingTask}
+					/>
+				}
+			/>
+			<Route
+				path="task/:id"
+				element={
+					<TaskPage
+						todos={todos}
+						setTodos={setTodos}
+						refreshTodos={refreshTodos}
+						isLoading={isLoading}
+						setIsLoading={setIsLoading}
+						modalActive={modalActive}
+						setModalActive={setModalActive}
+						editingTask={editingTask}
+						setEditingTask={setEditingTask}
+					/>
+				}
+			/>
+			<Route path="*" element={<Page404 />} />
+		</Routes>
 	);
 }
 export default App;

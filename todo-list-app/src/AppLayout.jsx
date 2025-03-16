@@ -1,6 +1,6 @@
 import styles from './app.module.css';
 import { ActionForm, SearchForm, EditModalWindow } from '../components/';
-import { completeToggle, deleteTask } from '../api';
+import { NavLink } from 'react-router-dom';
 
 export const AppLayout = ({
 	todos,
@@ -13,22 +13,15 @@ export const AppLayout = ({
 	filteredTodos,
 	isSorted,
 	setIsSorted,
-	modalActive,
-	setModalActive,
-	editingTask,
-	setEditingTask,
 }) => {
 	return (
 		<>
-			<EditModalWindow
-				todos={todos}
-				setTodos={setTodos}
-				modalActive={modalActive}
-				setModalActive={setModalActive}
-				editingTask={editingTask}
-			/>
 			<div className={styles.app}>
-				<h1>Cписок дел</h1>
+				<h1>
+					<NavLink to="/" className={styles.link}>
+						Cписок дел
+					</NavLink>
+				</h1>
 				<ActionForm task={task} setTask={setTask} refreshTodos={refreshTodos} />
 				<SearchForm
 					setSearchValue={setSearchValue}
@@ -41,29 +34,14 @@ export const AppLayout = ({
 					<ul>
 						{filteredTodos().map(({ id, title, completed }) => (
 							<li key={id}>
-								<p className={completed ? `${styles.completed}` : ''}>
-									{title}
-								</p>
-								<div className={styles['action-buttons']}>
-									<button
-										className={
-											completed
-												? styles['action-button-completed']
-												: styles['action-button-confirm']
-										}
-										onClick={() => {
-											completeToggle(
-												todos,
-												id,
-												title,
-												completed,
-												setTodos,
-												refreshTodos,
-											);
-										}}
+								<NavLink to={`task/${id}`}>
+									<p
+										className={`${styles.todo} ${completed ? `${styles.completed}` : ''}`}
 									>
-										{completed ? '⟲' : '✔'}
-									</button>
+										{title}
+									</p>
+								</NavLink>
+								{/* <div className={styles['action-buttons']}>
 									<button
 										className={styles['action-button-edit']}
 										onClick={() => {
@@ -73,15 +51,7 @@ export const AppLayout = ({
 									>
 										🖊
 									</button>
-									<button
-										className={styles['action-button-delete']}
-										onClick={() =>
-											deleteTask(todos, id, refreshTodos, setTodos)
-										}
-									>
-										✖
-									</button>
-								</div>
+								</div> */}
 							</li>
 						))}
 					</ul>

@@ -6,8 +6,8 @@ export const EditModalWindow = ({
 	setTodos,
 	modalActive,
 	setModalActive,
-	refreshTodos,
 	editingTask,
+	setPickedTask,
 }) => {
 	const [buttonActive, setButtonActive] = useState(false);
 	const [editedTask, setEditedTask] = useState('');
@@ -40,7 +40,10 @@ export const EditModalWindow = ({
 			}),
 		}).then(() => {
 			setEditedTask('');
-			refreshTodos();
+			setPickedTask((prevData) => ({
+				...prevData,
+				title: editedTask,
+			}));
 		});
 	};
 
