@@ -1,4 +1,4 @@
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import styles from './taskpage.module.css';
 import { useEffect, useState } from 'react';
 import { completeToggle, deleteTask } from '../../api';
@@ -38,9 +38,9 @@ export const TaskPage = ({
 				setPickedTask={setPickedTask}
 			/>
 			<h1>Дело:</h1>
-			<NavLink to="/" className={styles['back-button']}>
+			<Link to="/" className={styles['back-button']}>
 				<button>◀ Назад</button>
-			</NavLink>
+			</Link>
 			{isLoading ? (
 				<div className={styles.loader}></div>
 			) : pickedTask ? (
@@ -82,14 +82,21 @@ export const TaskPage = ({
 						>
 							🖊
 						</button>
-						<button
-							className={styles['action-button-delete']}
-							onClick={() =>
-								deleteTask(todos, pickedTask.id, setTodos, setPickedTask)
-							}
-						>
-							✖
-						</button>
+						<Link to="/">
+							<button
+								className={styles['action-button-delete']}
+								onClick={() =>
+									deleteTask(
+										todos,
+										pickedTask.id,
+										setTodos,
+										setPickedTask,
+									)
+								}
+							>
+								✖
+							</button>
+						</Link>
 					</div>
 				</div>
 			) : (
