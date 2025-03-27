@@ -6,7 +6,7 @@ export const Page404 = () => {
 		<div className={styles['page404']}>
 			<h1>Такой страницы не существует😭</h1>
 			<Link to="/" className={styles.link}>
-				<button>Вернуться к списку</button>
+				Вернуться к списку
 			</Link>
 		</div>
 	);

@@ -1,0 +1,36 @@
+import styles from './todoslistpage.module.css';
+import { ControlPanel } from '../../components';
+import { useTodos } from '../../hooks/useTodos';
+import { Link } from 'react-router-dom';
+
+export const TodosListPage = () => {
+	const { todos: sortedTodos, isLoading, error } = useTodos();
+
+	if (isLoading) return <div className={styles.loader}></div>;
+
+	if (error) return <div>Неизвестная ошибка!</div>;
+
+	return (
+		<div className={styles.app}>
+			<h1>
+				<Link to="/" className={styles.link}>
+					Cписок дел
+				</Link>
+			</h1>
+			<ControlPanel />
+			<ul>
+				{sortedTodos.map(({ id, title, completed }) => (
+					<li key={id}>
+						<Link to={`task/${id}`}>
+							<p
+								className={`${styles.todo} ${completed ? `${styles.completed}` : ''}`}
+							>
+								{title}
+							</p>
+						</Link>
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};

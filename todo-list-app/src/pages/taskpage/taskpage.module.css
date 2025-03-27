@@ -52,6 +52,9 @@
 	border-bottom: 1px solid black;
 	max-width: 100%;
 	text-align: center;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	white-space: pre-wrap;
 }
 
 .action-buttons {
@@ -93,4 +96,21 @@
 
 .completed {
 	text-decoration: line-through;
+}
+
+.back-button {
+	color: aliceblue;
+	padding: 0;
+}
+
+.edit-textarea {
+	min-height: 40px;
+	width: 500px;
+	font-family: inherit;
+	border-radius: 5px;
+	resize: none;
+	overflow-y: hidden;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	white-space: pre-wrap;
 }
