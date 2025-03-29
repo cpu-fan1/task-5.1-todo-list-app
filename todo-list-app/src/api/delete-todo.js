@@ -1,4 +1,4 @@
-export const deleteTask = (todos, id, refreshTodos, setTodos) => {
+export const deleteTask = (todos, id, setTodos) => {
 	fetch(`http://localhost:3005/todos/${id}`, {
 		method: 'DELETE',
 	})

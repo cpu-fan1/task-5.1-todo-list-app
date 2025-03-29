@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
-import { AppLayout } from './AppLayout';
+import styles from './app.module.css';
+import { ControlPanel, Todo } from './components';
 
 function App() {
 	const [todos, setTodos] = useState([]);
-	const [task, setTask] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [refreshTodosFlag, setRefreshTodosFlag] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 	const [isSorted, setIsSorted] = useState(false);
-	const [modalActive, setModalActive] = useState(false);
-	const [editingTask, setEditingTask] = useState(null);
 
 	const refreshTodos = () => setRefreshTodosFlag(!refreshTodosFlag);
 
@@ -25,11 +23,6 @@ function App() {
 	}, [refreshTodosFlag]);
 
 	const filteredTodos = () => {
-		// if (!searchValue) {
-		// 	return todos;
-		// }
-		// return todos.filter((todo) => todo.title.toLowerCase().includes(searchValue));
-
 		let result = todos;
 		if (searchValue) {
 			result = result.filter((todo) =>
@@ -42,23 +35,30 @@ function App() {
 		return result;
 	};
 
+	if (isLoading) return <div className={styles.loader}></div>;
+
 	return (
-		<AppLayout
-			todos={todos}
-			setTodos={setTodos}
-			isLoading={isLoading}
-			task={task}
-			setTask={setTask}
-			refreshTodos={refreshTodos}
-			setSearchValue={setSearchValue}
-			filteredTodos={filteredTodos}
-			isSorted={isSorted}
-			setIsSorted={setIsSorted}
-			modalActive={modalActive}
-			setModalActive={setModalActive}
-			editingTask={editingTask}
-			setEditingTask={setEditingTask}
-		/>
+		<div className={styles.app}>
+			<h1>Cписок дел</h1>
+			<ControlPanel
+				refreshTodos={refreshTodos}
+				setSearchValue={setSearchValue}
+				isSorted={isSorted}
+				setIsSorted={setIsSorted}
+			/>
+			<ul>
+				{filteredTodos().map(({ id, title, completed }) => (
+					<Todo
+						key={id}
+						id={id}
+						title={title}
+						completed={completed}
+						todos={todos}
+						setTodos={setTodos}
+					/>
+				))}
+			</ul>
+		</div>
 	);
 }
 export default App;
