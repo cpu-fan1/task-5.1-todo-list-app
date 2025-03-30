@@ -1,32 +1,16 @@
 import { useState } from 'react';
 import styles from './todo.module.css';
-import { deleteTask, completeToggle } from '../../api';
+import { AppContext } from '../../context';
+import { useContext } from 'react';
 
-export const Todo = ({ id, title, completed, todos, setTodos }) => {
+export const Todo = ({ id, title, completed }) => {
+	const { updateTodo, deleteTodo } = useContext(AppContext);
 	const [isEditing, setIsEditing] = useState(false);
 	const [editingTitle, setEditingTitle] = useState(title);
 
 	const editHandler = ({ target }) => {
 		const inputValue = target.value;
 		setEditingTitle(inputValue);
-	};
-
-	const saveEditHandler = () => {
-		setTodos(
-			todos.map((todo) =>
-				todo.id === id ? { ...todo, title: editingTitle } : todo,
-			),
-		);
-		fetch(`http://localhost:3005/todos/${id}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				title: editingTitle,
-				completed: completed,
-			}),
-		}).then(() => {
-			setIsEditing(false);
-		});
 	};
 
 	return (
@@ -49,7 +33,7 @@ export const Todo = ({ id, title, completed, todos, setTodos }) => {
 							: styles['action-button-confirm']
 					}
 					onClick={() => {
-						completeToggle(todos, id, title, completed, setTodos);
+						updateTodo(id, completed);
 					}}
 				>
 					{completed ? '⟲' : '✔'}
@@ -59,7 +43,8 @@ export const Todo = ({ id, title, completed, todos, setTodos }) => {
 					className={styles['action-button-edit']}
 					onClick={() => {
 						if (isEditing) {
-							saveEditHandler();
+							updateTodo(id, editingTitle);
+							setIsEditing(false);
 						} else {
 							setIsEditing(true);
 							setEditingTitle(title);
@@ -71,7 +56,7 @@ export const Todo = ({ id, title, completed, todos, setTodos }) => {
 
 				<button
 					className={styles['action-button-delete']}
-					onClick={() => deleteTask(todos, id, setTodos)}
+					onClick={() => deleteTodo(id)}
 				>
 					✖
 				</button>

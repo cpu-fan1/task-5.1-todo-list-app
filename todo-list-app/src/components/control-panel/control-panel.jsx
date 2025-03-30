@@ -1,25 +1,18 @@
 import { useState } from 'react';
 import styles from './controlpanel.module.css';
+import { AppContext } from '../../context';
+import { useContext } from 'react';
 
-export const ControlPanel = ({ refreshTodos, setSearchValue, isSorted, setIsSorted }) => {
+export const ControlPanel = () => {
+	const { setSearchValue, isSorted, setIsSorted, createTodo } = useContext(AppContext);
 	const [task, setTask] = useState('');
 	const [buttonActive, setButtonActive] = useState(false);
 
 	const onSubmit = (event) => {
 		event.preventDefault();
-
-		fetch('http://localhost:3005/todos', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				title: task,
-				completed: false,
-			}),
-		}).then(() => {
-			setTask('');
-			setButtonActive(false);
-			refreshTodos();
-		});
+		createTodo(task);
+		setTask('');
+		setButtonActive(false);
 	};
 
 	const taskHandler = (event) => {
