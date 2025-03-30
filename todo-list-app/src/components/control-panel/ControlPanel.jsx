@@ -1,11 +1,9 @@
-import { useTodos } from '../../hooks/useTodos';
 import styles from './controlpanel.module.css';
 import { useState } from 'react';
 
-export const ControlPanel = () => {
+export const ControlPanel = ({ isSorted, setIsSorted, setSearchValue, createTodo }) => {
 	const [buttonActive, setButtonActive] = useState(false);
 	const [task, setTask] = useState('');
-	const { isSorted, setIsSorted, setSearchValue, createTodo } = useTodos();
 
 	const onSubmit = (event) => {
 		event.preventDefault();

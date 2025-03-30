@@ -24,6 +24,11 @@
       "title": "завтрак",
       "completed": false,
       "id": 9
+    },
+    {
+      "title": "обед",
+      "completed": false,
+      "id": 10
     }
   ]
 }
