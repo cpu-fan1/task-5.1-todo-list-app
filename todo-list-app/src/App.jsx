@@ -1,25 +1,39 @@
 import styles from './app.module.css';
 import { ControlPanel, Todo } from './components';
-import { useTodos } from './hooks/useTodos';
-import { AppContext } from './context.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { controlPanelSelector, todosSelector } from './selectors';
+import { useEffect } from 'react';
+import { readTodos } from './actions';
 
 function App() {
-	const todosContext = useTodos();
+	const dispatch = useDispatch();
+	const { todos, loading } = useSelector(todosSelector);
+	const { searchValue, isSorted } = useSelector(controlPanelSelector);
 
-	if (todosContext.isLoading) return <div className={styles.loader}></div>;
+	useEffect(() => {
+		dispatch(readTodos());
+	}, [dispatch]);
+
+	const filteredTodos = searchValue
+		? todos.filter((todo) => todo.title.toLowerCase().includes(searchValue))
+		: todos;
+
+	const sortedTodos = isSorted
+		? [...filteredTodos].sort((a, b) => a.title.localeCompare(b.title))
+		: filteredTodos;
+
+	if (loading) return <div className={styles.loader}></div>;
 
 	return (
-		<AppContext value={todosContext}>
-			<div className={styles.app}>
-				<h1>Cписок дел</h1>
-				<ControlPanel />
-				<ul>
-					{todosContext.todos.map(({ id, title, completed }) => (
-						<Todo key={id} id={id} title={title} completed={completed} />
-					))}
-				</ul>
-			</div>
-		</AppContext>
+		<div className={styles.app}>
+			<h1>Cписок дел</h1>
+			<ControlPanel />
+			<ul>
+				{sortedTodos.map(({ id, title, completed }) => (
+					<Todo key={id} id={id} title={title} completed={completed} />
+				))}
+			</ul>
+		</div>
 	);
 }
 export default App;

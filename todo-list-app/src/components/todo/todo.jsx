@@ -1,16 +1,29 @@
-import { useState } from 'react';
 import styles from './todo.module.css';
-import { AppContext } from '../../context';
-import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { editingSelector } from '../../selectors';
+import { deleteTodo, updateTodo } from '../../actions';
 
 export const Todo = ({ id, title, completed }) => {
-	const { updateTodo, deleteTodo } = useContext(AppContext);
-	const [isEditing, setIsEditing] = useState(false);
-	const [editingTitle, setEditingTitle] = useState(title);
+	const dispatch = useDispatch();
+	const { editingValue, editingId } = useSelector(editingSelector);
+
+	const isEditing = editingId === id;
 
 	const editHandler = ({ target }) => {
-		const inputValue = target.value;
-		setEditingTitle(inputValue);
+		dispatch({ type: 'SET_EDITING_VALUE', payload: target.value });
+	};
+
+	const deleteHandler = () => {
+		dispatch(deleteTodo(id));
+	};
+
+	const startEditHandler = () => {
+		dispatch({ type: 'START_EDITING', payload: { id, title } });
+	};
+
+	const editAndSaveHandler = () => {
+		dispatch(updateTodo(id, editingValue));
+		dispatch({ type: 'EDITING_FINISHED' });
 	};
 
 	return (
@@ -19,7 +32,7 @@ export const Todo = ({ id, title, completed }) => {
 				<input
 					type="text"
 					placeholder="✎ Откорректируйте дело"
-					value={editingTitle}
+					value={editingValue}
 					onChange={editHandler}
 				/>
 			) : (
@@ -33,7 +46,7 @@ export const Todo = ({ id, title, completed }) => {
 							: styles['action-button-confirm']
 					}
 					onClick={() => {
-						updateTodo(id, completed);
+						dispatch(updateTodo(id, completed));
 					}}
 				>
 					{completed ? '⟲' : '✔'}
@@ -41,22 +54,14 @@ export const Todo = ({ id, title, completed }) => {
 
 				<button
 					className={styles['action-button-edit']}
-					onClick={() => {
-						if (isEditing) {
-							updateTodo(id, editingTitle);
-							setIsEditing(false);
-						} else {
-							setIsEditing(true);
-							setEditingTitle(title);
-						}
-					}}
+					onClick={isEditing ? editAndSaveHandler : startEditHandler}
 				>
 					{isEditing ? '🖪' : '🖊'}
 				</button>
 
 				<button
 					className={styles['action-button-delete']}
-					onClick={() => deleteTodo(id)}
+					onClick={deleteHandler}
 				>
 					✖
 				</button>

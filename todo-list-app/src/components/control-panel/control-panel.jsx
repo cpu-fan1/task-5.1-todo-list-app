@@ -1,32 +1,24 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './controlpanel.module.css';
-import { AppContext } from '../../context';
-import { useContext } from 'react';
+import { controlPanelSelector } from '../../selectors';
+import { createTodo } from '../../actions';
 
 export const ControlPanel = () => {
-	const { setSearchValue, isSorted, setIsSorted, createTodo } = useContext(AppContext);
-	const [task, setTask] = useState('');
-	const [buttonActive, setButtonActive] = useState(false);
+	const dispatch = useDispatch();
+	const { inputValue, buttonActive, isSorted } = useSelector(controlPanelSelector);
 
 	const onSubmit = (event) => {
 		event.preventDefault();
-		createTodo(task);
-		setTask('');
-		setButtonActive(false);
+		dispatch(createTodo(inputValue));
+		dispatch({ type: 'EMPTY_INPUT_VALUE' });
 	};
 
-	const taskHandler = (event) => {
-		const inputValue = event.target.value;
-		setTask(inputValue);
-		setButtonActive(inputValue.length > 0);
+	const taskHandler = ({ target }) => {
+		dispatch({ type: 'SET_INPUT_VALUE', payload: target.value });
 	};
 
-	const onSearchChange = (event) => {
-		setSearchValue(event.target.value.toLowerCase());
-	};
-
-	const onSortClick = () => {
-		setIsSorted((prevValue) => !prevValue);
+	const onSearchChange = ({ target }) => {
+		dispatch({ type: 'SET_SEARCH_VALUE', payload: target.value.toLowerCase() });
 	};
 
 	const onSearchSubmit = (event) => {
@@ -39,7 +31,7 @@ export const ControlPanel = () => {
 				<input
 					type="text"
 					name="task"
-					value={task}
+					value={inputValue}
 					placeholder="Введите задачу"
 					onChange={taskHandler}
 				/>
@@ -57,7 +49,7 @@ export const ControlPanel = () => {
 			</form>
 			<button
 				className={`${styles['sort-button']} ${isSorted ? styles.active : ''}`}
-				onClick={onSortClick}
+				onClick={() => dispatch({ type: 'IS_SORTED' })}
 			>
 				{isSorted ? 'Отставить' : 'Отсортировать по алфавиту'}
 			</button>
